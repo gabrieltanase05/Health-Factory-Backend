@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const UserSessionSchema = mongoose.Schema({
     userID: {
@@ -16,4 +16,4 @@ const UserSessionSchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('UserSession', UserSessionSchema);
+export default mongoose.model('UserSession', UserSessionSchema);

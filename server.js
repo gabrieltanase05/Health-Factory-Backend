@@ -1,30 +1,32 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const app = express();
-const bodyParser = require('body-parser');
+// Imports
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import User from './models/user.js';
+import UserSession from './models/userSession.js';
+import 'dotenv/config.js';
+
+// Server config
 const router = express.Router();
-const User = require('./models/user');
-const UserSession = require('./models/userSession');
-require('dotenv/config');
+const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/api', router);
 
-//Port Listening Server
-app.listen(8080);
 //Connection to MongoDB
 mongoose.connect(
     process.env.DB_CONNECTION,
     {   useNewUrlParser: true,
         useUnifiedTopology: true,
-        useFindAndModify: false
+        useFindAndModify: true
     },
 
     ()=> console.log('Connected to MongoDB!')
 );
 //Check the connection to MongoDB
 mongoose.connection.on('error', console.error.bind(console, 'Error connection to MongoDB'))
+
 //POST Request for user Registration
 router.post('/register', (req, res) => {
     const {firstName, lastName, password, isTrainer} = req.body;
@@ -92,6 +94,7 @@ router.post('/register', (req, res) => {
         }
     });
 });
+
 //POST Request for user Login
 router.post('/login', (req, res, next) => {
     const {password} = req.body
@@ -154,6 +157,7 @@ router.post('/login', (req, res, next) => {
         });
     });
 });
+
 //Verify the token of user
 router.get('/verify', (req, res, next) => {
     const {token} = req.query;
@@ -181,6 +185,7 @@ router.get('/verify', (req, res, next) => {
             }
         });
 });
+
 //GET Request for user Logout
 router.get('/logout', (req, res, next)=>{
     const {token} = req.query
@@ -203,6 +208,7 @@ router.get('/logout', (req, res, next)=>{
         });
     })
 });
+
 //Load the user informations for Profile
 router.get('/userInfo/', function(req, res){
     const {id}=req.query
@@ -219,6 +225,7 @@ router.get('/userInfo/', function(req, res){
         }
     })
 });
+
 //Update the user informations(Save)
 router.post('/updateUserInfo/', function(req, res){
     const {id}=req.query
@@ -245,3 +252,7 @@ router.post('/updateUserInfo/', function(req, res){
         })
         // .catch(err=>console.log(err))
 });
+
+
+//Port Listening Server
+app.listen(process.env.PORT || 8080, () => console.log('Server is running on port 8080'));
