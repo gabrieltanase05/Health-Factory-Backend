@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
-const UserSchema = mongoose.Schema({
+const MemberSchema = mongoose.Schema({
     firstName: {
         type: String,
         require: true
@@ -61,19 +61,15 @@ const UserSchema = mongoose.Schema({
     isDeleted: {
         type: Boolean,
         default: false
-    },
-    isTrainer: {
-        type: Boolean,
-        default: false
     }
 });
 //Crypt the user password
-    UserSchema.methods.generateHash = function(password){
+    MemberSchema.methods.generateHash = function(password){
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
     };
-    UserSchema.methods.validPassword =function(password) {
+    MemberSchema.methods.validPassword =function(password) {
         return bcrypt.compareSync(password, this.password);
     };
 
 
-export default mongoose.model('User', UserSchema)
+export default mongoose.model('Member', MemberSchema)
